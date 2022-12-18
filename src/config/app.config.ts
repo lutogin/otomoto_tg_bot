@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv-safe';
-
-dotenv.config();
+// import * as dotenv from 'dotenv-safe';
+//
+// dotenv.config();
 
 const {
   TELEGRAM_API_TOKEN,
