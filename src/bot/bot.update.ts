@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common';
 import { Ctx, Hears, Help, On, Start, Update } from 'nestjs-telegraf';
 // eslint-disable-next-line import/no-unresolved
 import { Context } from 'telegraf';
 
 @Update()
+@Injectable()
 export class BotUpdate {
   @Start()
   async start(@Ctx() ctx: Context): Promise<void> {
