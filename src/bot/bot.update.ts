@@ -3,7 +3,7 @@ import { Ctx, Hears, Help, On, Start, Update } from 'nestjs-telegraf';
 import { Context } from 'telegraf';
 
 @Update()
-export class BotService {
+export class BotUpdate {
   @Start()
   async start(@Ctx() ctx: Context): Promise<void> {
     await ctx.reply('Please, wait a few days for the release. Bot just in DEV mod');

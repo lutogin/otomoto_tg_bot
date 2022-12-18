@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
-import { BotService } from './bot.service';
+import { BotUpdate } from './bot.update';
 
 @Module({
   imports: [
@@ -13,6 +13,6 @@ import { BotService } from './bot.service';
       inject: [ConfigService],
     }),
   ],
-  providers: [BotService],
+  providers: [BotUpdate],
 })
 export class BotModule {}
