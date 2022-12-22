@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
+import { MessagesModule } from '../messages/messages.module';
+import { SearchRequestsModule } from '../search-requests/search-requests.module';
 import { BotUpdate } from './bot.update';
 
 @Module({
@@ -12,6 +14,8 @@ import { BotUpdate } from './bot.update';
       }),
       inject: [ConfigService],
     }),
+    MessagesModule,
+    SearchRequestsModule,
   ],
   providers: [BotUpdate],
 })
