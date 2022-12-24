@@ -20,11 +20,15 @@ export class TasksService {
 
   @Cron('*/5 * * * *')
   async handleCron() {
-    const searchRequests = await this.searchRequests.findAll();
-
-    this.logger.log('Cron is started.');
-
     try {
+      const searchRequests = await this.searchRequests.findAll();
+
+      if (!searchRequests) {
+        this.logger.log('There are not any search requests.');
+
+        return;
+      }
+
       await Promise.all(
         searchRequests.map(async (searchRequest) => {
           const articles = await this.otomotoService.getArticles(
@@ -32,6 +36,10 @@ export class TasksService {
             Number.parseInt(this.configService.get('OTOMOTO_PAGE_SIZE'), 10) ||
               36,
           );
+
+          if (!articles) {
+            throw new Error('Articles did not found found.');
+          }
 
           const newArticles = articles.slice(
             0,

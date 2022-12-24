@@ -4,7 +4,7 @@ import { IArticle, OtomotoSelectors } from './otomoto-parser.interfaces';
 
 @Injectable()
 export class OtomotoParserService {
-  private buildDescription(description: string): string {
+  private static buildDescription(description: string): string {
     return description?.length > 100 ? 'n/a' : description;
   }
 
@@ -15,7 +15,7 @@ export class OtomotoParserService {
       link: article.querySelector(OtomotoSelectors.Link)?.attributes?.href
         ?.textContent,
       title: article.querySelector(OtomotoSelectors.Title)?.textContent,
-      description: this.buildDescription(
+      description: OtomotoParserService.buildDescription(
         article.querySelector(OtomotoSelectors.Description)?.textContent,
       ),
       year: article.querySelector(OtomotoSelectors.Year)?.textContent,

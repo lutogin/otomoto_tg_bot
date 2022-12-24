@@ -54,57 +54,67 @@ export class BotUpdate {
 
   @Hears(/^https:\/\/www\.otomoto\.pl\/.*$/u)
   async hears(@Ctx() ctx: Context): Promise<void> {
-    const { chat, from: user } = ctx.message;
-    const lang = ctx.message.from.language_code;
-    const otomotoUrl = get(ctx, 'update.message.text');
+    try {
+      const { chat, from: user } = ctx.message;
+      const lang = ctx.message.from.language_code;
+      const otomotoUrl = get(ctx, 'update.message.text');
 
-    this.logger.log(`Setup link. Chat ID ${user.id}`);
+      this.logger.log(`Setup link. Chat ID ${user.id}`);
 
-    await ctx.reply(
-      `Here is last ${this.LAST_RECORD_COUNT} articles from you url.`,
-    );
-
-    const articles = await this.otomoto.getArticles(
-      otomotoUrl,
-      this.LAST_RECORD_COUNT,
-    );
-
-    await Promise.allSettled(
-      articles.map((article) =>
-        ctx.replyWithPhoto(
-          { url: article.img },
-          {
-            caption: this.msgService.fmtCaption(article),
-            parse_mode: 'HTML',
-          },
-        ),
-      ),
-    );
-
-    const result = await this.searchRequestsService.create({
-      chatId: chat.id,
-      userId: user.id,
-      firstName: user.first_name,
-      userName: user.username,
-      url: otomotoUrl,
-      languageCode: lang,
-      lastSeenArticleId: articles[0].id,
-    });
-
-    if (result.upsertedCount) {
       await ctx.reply(
-        this.msgService.makeMessage(
-          MessagesMap.StartLooking,
-          ctx.message.from.language_code,
+        this.msgService.makeMessage(MessagesMap.LastArticles, lang),
+      );
+
+      const articles = await this.otomoto.getArticles(
+        otomotoUrl,
+        this.LAST_RECORD_COUNT,
+      );
+
+      if (!articles) {
+        await ctx.reply('There are not any article by your url.');
+
+        return;
+      }
+
+      const result = await this.searchRequestsService.create({
+        chatId: chat.id,
+        userId: user.id,
+        firstName: user.first_name,
+        userName: user.username,
+        url: otomotoUrl,
+        languageCode: lang,
+        lastSeenArticleId: articles[0].id,
+      });
+
+      await Promise.allSettled(
+        articles.reverse().map((article) =>
+          ctx.replyWithPhoto(
+            { url: article.img },
+            {
+              caption: this.msgService.fmtCaption(article),
+              parse_mode: 'HTML',
+            },
+          ),
         ),
       );
-    } else {
-      await ctx.reply(
-        this.msgService.makeMessage(
-          MessagesMap.StartLookingUpdatedUrl,
-          ctx.message.from.language_code,
-        ),
-      );
+
+      if (result.upsertedCount) {
+        await ctx.reply(
+          this.msgService.makeMessage(
+            MessagesMap.StartLooking,
+            ctx.message.from.language_code,
+          ),
+        );
+      } else {
+        await ctx.reply(
+          this.msgService.makeMessage(
+            MessagesMap.StartLookingUpdatedUrl,
+            ctx.message.from.language_code,
+          ),
+        );
+      }
+    } catch (e) {
+      this.logger.error(e.message || e, e.stack);
     }
   }
 

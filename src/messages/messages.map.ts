@@ -49,4 +49,9 @@ export const MessagesMap = {
     pl: '👌 Twój url został zaktualizowany. Będę to obserwował dla ciebie.',
     ua: '👌 Ваше url оновлено. Я буду стежити за ним для вас.',
   },
+  LastArticles: {
+    en: '📰 Here is last 5 articles from you url.',
+    pl: '📰 Oto ostatnie 5 artykułów z Twojego adresu url.',
+    ua: '📰 Ось останні 5 статей з вашого url',
+  },
 };
