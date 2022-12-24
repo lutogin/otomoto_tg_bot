@@ -16,7 +16,10 @@ const {
   ADMIN_CHAT_ID,
 } = process.env;
 
-const MONGO_URI = `${MONGO_URI_SCHEME}://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?retryWrites=true&w=majority`;
+const MONGO_URI =
+  NODE_ENV === 'local'
+    ? `${MONGO_URI_SCHEME}://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?retryWrites=true&w=majority`
+    : `${MONGO_URI_SCHEME}://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DATABASE}?retryWrites=true&w=majority`;
 
 export default (): Record<string, any> => ({
   TELEGRAM_BOT_TOKEN,
