@@ -1,9 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
+import { last } from 'lodash';
 import { BotService } from '../bot/bot.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
+
+const cronTime = process.env.CRON_TIME || '*/10 * * * *';
 
 @Injectable()
 export class TasksService {
@@ -18,9 +21,9 @@ export class TasksService {
     this.logger = new Logger(TasksService.name);
   }
 
-  @Cron('*/5 * * * *') // every 5 minutes
+  @Cron(cronTime)
   async handleCron(): Promise<void> {
-    this.logger.log('Cron started');
+    this.logger.log('Cron started.');
 
     try {
       const searchRequests = await this.searchRequests.findAll();
@@ -43,31 +46,32 @@ export class TasksService {
             throw new Error('Articles did not found found.');
           }
 
-          const newArticles = articles.slice(
-            0,
-            articles.findIndex(
-              (article) => article.id === searchRequest.lastSeenArticleId,
-            ),
+          const lastSeenArticleIndex = articles.findIndex(
+            (article) => article.id === searchRequest.lastSeenArticleId,
           );
 
-          if (!newArticles.length) {
-            this.logger.log(`No new article for ${searchRequest.chatId}.`);
+          if (lastSeenArticleIndex <= 0) {
+            this.logger.log(`No new article for ${searchRequest.userName}.`);
 
             return null;
           }
 
+          const newArticles = articles.slice(0, lastSeenArticleIndex);
+
           this.logger.log(
-            `Found ${newArticles.length} new articles for ${searchRequest.chatId}.`,
+            `Found ${newArticles.length} new articles for ${searchRequest.userName}.`,
           );
 
           await Promise.all(
-            newArticles.map((article) =>
-              this.bot.sendArticle(searchRequest.chatId, article),
-            ),
+            newArticles
+              .reverse()
+              .map((article) =>
+                this.bot.sendArticle(searchRequest.chatId, article),
+              ),
           );
 
           await this.searchRequests.update(searchRequest.chatId, {
-            lastSeenArticleId: newArticles[0].id,
+            lastSeenArticleId: last(newArticles).id,
           });
         }),
       );
