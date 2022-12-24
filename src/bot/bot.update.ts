@@ -65,9 +65,7 @@ export class BotUpdate {
 
       this.logger.log(`Setup link. Chat ID ${user.id}`);
 
-      await ctx.reply(
-        this.msgService.makeMessage(MessagesMap.LastArticles, lang),
-      );
+      await ctx.reply(this.msgService.makeMessage(MessagesMap.Wait, lang));
 
       const articles = await this.otomoto.getArticles(
         otomotoUrl,
@@ -79,6 +77,10 @@ export class BotUpdate {
 
         return;
       }
+
+      await ctx.reply(
+        this.msgService.makeMessage(MessagesMap.LastArticles, lang),
+      );
 
       const result = await this.searchRequestsService.create({
         chatId: chat.id,

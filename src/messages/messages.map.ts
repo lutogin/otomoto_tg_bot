@@ -54,4 +54,9 @@ export const MessagesMap = {
     pl: '📰 Oto ostatnie 5 artykułów z Twojego adresu url.',
     ua: '📰 Ось останні 5 статей з вашого url',
   },
+  Wait: {
+    en: '🕒 Please wait. Getting a data and setting your url.',
+    pl: '🕒 Proszę czekać. Pobierz dane i ustaw swój url.',
+    ua: '🕒 Будь ласка, зачекайте. Отримання даних та налаштування вашого звязку.',
+  },
 };
