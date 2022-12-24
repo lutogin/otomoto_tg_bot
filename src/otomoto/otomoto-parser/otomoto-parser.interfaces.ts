@@ -10,7 +10,7 @@ export enum OtomotoSelectors {
   Location = 'div div~ul li span span',
   Date = 'div div~ul li~li',
   Img = 'div~div~div img',
-  Price = 'div~div~div~div div span',
+  Price = 'div~div~div > div span',
 }
 
 export interface IArticle {
