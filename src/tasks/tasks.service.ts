@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Cron } from '@nestjs/schedule';
+import { Interval } from '@nestjs/schedule';
 import { BotService } from '../bot/bot.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
@@ -18,8 +18,10 @@ export class TasksService {
     this.logger = new Logger(TasksService.name);
   }
 
-  @Cron('*/5 * * * *')
-  async handleCron() {
+  @Interval(5 * 60 * 1000) // every 5 minutes
+  async handleCron(): Promise<void> {
+    this.logger.log('Cron started');
+
     try {
       const searchRequests = await this.searchRequests.findAll();
 
