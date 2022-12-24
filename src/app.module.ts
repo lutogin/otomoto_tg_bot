@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { AppController } from './app.controller';
 import { BotModule } from './bot/bot.module';
 import { SearchRequestsModule } from './search-requests/search-requests.module';
+import { TasksModule } from './tasks/tasks.module';
+import { OtomotoModule } from './otomoto/otomoto.module';
 import appConfig from './config/app.config';
 
 @Module({
@@ -20,8 +23,11 @@ import appConfig from './config/app.config';
       }),
       inject: [ConfigService],
     }),
+    ScheduleModule.forRoot(),
     BotModule,
     SearchRequestsModule,
+    TasksModule,
+    OtomotoModule,
   ],
   controllers: [AppController],
 })

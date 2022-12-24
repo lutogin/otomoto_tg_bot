@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { MessagesModule } from '../messages/messages.module';
+import { OtomotoModule } from '../otomoto/otomoto.module';
 import { SearchRequestsModule } from '../search-requests/search-requests.module';
 import { BotService } from './bot.service';
 import { BotUpdate } from './bot.update';
@@ -18,6 +19,7 @@ import { BotUpdate } from './bot.update';
     }),
     MessagesModule,
     SearchRequestsModule,
+    OtomotoModule,
   ],
   providers: [BotUpdate, BotService],
 })
