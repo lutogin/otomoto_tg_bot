@@ -67,10 +67,7 @@ export class BotUpdate {
 
       await ctx.reply(this.msgService.makeMessage(MessagesMap.Wait, lang));
 
-      const articles = await this.otomoto.getArticles(
-        otomotoUrl,
-        this.LAST_RECORD_COUNT,
-      );
+      const articles = await this.otomoto.getArticles(otomotoUrl);
 
       if (!articles) {
         await ctx.reply('There are not any article by your url.');
@@ -89,19 +86,22 @@ export class BotUpdate {
         userName: user.username,
         url: otomotoUrl,
         languageCode: lang,
-        lastSeenArticleId: articles[0].id,
+        lastSeenArticleIds: articles.map((article) => article.id),
       });
 
       await Promise.allSettled(
-        articles.reverse().map((article) =>
-          ctx.replyWithPhoto(
-            { url: article.img },
-            {
-              caption: this.msgService.fmtCaption(article),
-              parse_mode: 'HTML',
-            },
+        articles
+          .slice(1, this.LAST_RECORD_COUNT)
+          .reverse()
+          .map((article) =>
+            ctx.replyWithPhoto(
+              { url: article.img },
+              {
+                caption: this.msgService.fmtCaption(article),
+                parse_mode: 'HTML',
+              },
+            ),
           ),
-        ),
       );
 
       if (result.upsertedCount) {

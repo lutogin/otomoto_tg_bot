@@ -38,7 +38,7 @@ export class SearchRequestsRepository {
             'firstName',
             'languageCode',
             'url',
-            'lastSeenArticleId',
+            'lastSeenArticleIds',
           ],
           {
             skip: offset,

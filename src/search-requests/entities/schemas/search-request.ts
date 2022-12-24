@@ -21,8 +21,8 @@ export class SearchRequest {
   @Prop({ type: String, required: true })
   url: string;
 
-  @Prop({ type: String, required: false })
-  lastSeenArticleId: string;
+  @Prop({ type: [String], required: false })
+  lastSeenArticleIds: string[];
 }
 
 export type SearchRequestsDocument = HydratedDocument<SearchRequest>;

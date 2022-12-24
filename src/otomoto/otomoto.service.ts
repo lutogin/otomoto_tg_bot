@@ -13,7 +13,7 @@ export class OtomotoService {
     this.logger = new Logger(OtomotoService.name);
   }
 
-  async getArticles(url: string, last = 5): Promise<IArticle[]> {
+  async getArticles(url: string, last = 36): Promise<IArticle[]> {
     try {
       const html = await this.client.makeRequest(url);
 

@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
-import { last } from 'lodash';
 import { BotService } from '../bot/bot.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
@@ -46,32 +45,31 @@ export class TasksService {
             throw new Error('Articles did not found found.');
           }
 
-          const lastSeenArticleIndex = articles.findIndex(
-            (article) => article.id === searchRequest.lastSeenArticleId,
+          const newArticles = articles.filter(
+            (article) => !searchRequest.lastSeenArticleIds.includes(article.id),
           );
 
-          if (lastSeenArticleIndex <= 0) {
+          if (!newArticles.length) {
             this.logger.log(`No new article for ${searchRequest.userName}.`);
 
             return null;
           }
-
-          const newArticles = articles.slice(0, lastSeenArticleIndex);
 
           this.logger.log(
             `Found ${newArticles.length} new articles for ${searchRequest.userName}.`,
           );
 
           await Promise.all(
-            newArticles
-              .reverse()
-              .map((article) =>
-                this.bot.sendArticle(searchRequest.chatId, article),
-              ),
+            newArticles.map((article) =>
+              this.bot.sendArticle(searchRequest.chatId, article),
+            ),
           );
 
           await this.searchRequests.update(searchRequest.chatId, {
-            lastSeenArticleId: last(newArticles).id,
+            lastSeenArticleIds: [
+              ...searchRequest.lastSeenArticleIds,
+              ...newArticles.map((article) => article.id),
+            ],
           });
         }),
       );

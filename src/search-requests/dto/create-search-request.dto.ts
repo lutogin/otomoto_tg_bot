@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsString } from 'class-validator';
 
 export class CreateSearchRequestDto {
   @IsNumber()
@@ -19,6 +19,7 @@ export class CreateSearchRequestDto {
   @IsString()
   url: string;
 
-  @IsString()
-  lastSeenArticleId: string;
+  @IsArray()
+  @IsString({ each: true })
+  lastSeenArticleIds: string[];
 }
