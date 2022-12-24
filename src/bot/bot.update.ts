@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Ctx, Hears, Help, On, Start, Update } from 'nestjs-telegraf';
 import { Context, Markup } from 'telegraf';
 import { get } from 'lodash';
@@ -7,6 +8,7 @@ import { MessagesMap } from '../messages/messages.map';
 import { MessagesService } from '../messages/messages.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
+import { BotService } from './bot.service';
 
 @Update()
 @Injectable()
@@ -19,6 +21,8 @@ export class BotUpdate {
     private readonly msgService: MessagesService,
     private readonly searchRequestsService: SearchRequestsService,
     private readonly otomoto: OtomotoService,
+    private readonly bot: BotService,
+    private readonly configService: ConfigService,
   ) {
     this.logger = new Logger(BotUpdate.name);
   }
@@ -115,6 +119,8 @@ export class BotUpdate {
       }
     } catch (e) {
       this.logger.error(e.message || e, e.stack);
+
+      await this.bot.sendMessageToAdmin(`Bot error: ${e.message}`);
     }
   }
 

@@ -71,6 +71,8 @@ export class TasksService {
       );
     } catch (e) {
       this.logger.error(e.message || e, e.stack);
+
+      await this.bot.sendMessageToAdmin(`Error during cron: ${e.message}`);
     }
   }
 }
