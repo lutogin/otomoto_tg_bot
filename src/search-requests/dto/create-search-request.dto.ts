@@ -11,8 +11,14 @@ export class CreateSearchRequestDto {
   firstName: string;
 
   @IsString()
+  userName: string;
+
+  @IsString()
   languageCode: string;
 
   @IsString()
   url: string;
+
+  @IsString()
+  lastSeenArticleId: string;
 }

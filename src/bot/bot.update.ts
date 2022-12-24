@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Ctx, Hears, Help, On, Start, Update } from 'nestjs-telegraf';
-import { Context, Format, Markup } from 'telegraf';
+import { Context, Markup } from 'telegraf';
 import { get } from 'lodash';
 
 import { MessagesMap } from '../messages/messages.map';
@@ -60,12 +60,35 @@ export class BotUpdate {
 
     this.logger.log(`Setup link. Chat ID ${user.id}`);
 
+    await ctx.reply(
+      `Here is last ${this.LAST_RECORD_COUNT} articles from you url.`,
+    );
+
+    const articles = await this.otomoto.getArticles(
+      otomotoUrl,
+      this.LAST_RECORD_COUNT,
+    );
+
+    await Promise.allSettled(
+      articles.map((article) =>
+        ctx.replyWithPhoto(
+          { url: article.img },
+          {
+            caption: this.msgService.fmtCaption(article),
+            parse_mode: 'HTML',
+          },
+        ),
+      ),
+    );
+
     const result = await this.searchRequestsService.create({
       chatId: chat.id,
       userId: user.id,
       firstName: user.first_name,
+      userName: user.username,
       url: otomotoUrl,
       languageCode: lang,
+      lastSeenArticleId: articles[0].id,
     });
 
     if (result.upsertedCount) {
@@ -83,25 +106,6 @@ export class BotUpdate {
         ),
       );
     }
-
-    await ctx.reply(
-      `Here is last ${this.LAST_RECORD_COUNT} articles from you url.`,
-    );
-
-    const articles = await this.otomoto.getArticles(
-      otomotoUrl,
-      this.LAST_RECORD_COUNT,
-    );
-
-    await ctx.replyWithPhoto(
-      { url: articles[0].img },
-      {
-        caption: `<a href="${articles[0].link}">${articles[0].title}</a>
-<b>Engine:</b> ${articles[0].engine}
-<b>Mileage:</b> ${articles[0].mileage}`,
-        parse_mode: 'HTML',
-      },
-    );
   }
 
   @Hears(MessagesMap.Menu.Setup.en)

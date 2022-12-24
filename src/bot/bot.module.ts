@@ -22,5 +22,6 @@ import { BotUpdate } from './bot.update';
     OtomotoModule,
   ],
   providers: [BotUpdate, BotService],
+  exports: [BotService],
 })
 export class BotModule {}

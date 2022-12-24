@@ -4,15 +4,15 @@ import { Model } from 'mongoose';
 import { CreateSearchRequestDto } from '../dto/create-search-request.dto';
 import { UpdateSearchRequestDto } from '../dto/update-search-request.dto';
 import {
-  SearchRequests,
+  SearchRequest,
   SearchRequestsDocument,
-} from '../entities/schemas/search-requests';
-import { IRepositoryResult } from './search-requests.interface';
+} from '../entities/schemas/search-request';
+import { IRepositoryResult } from '../search-requests.interface';
 
 @Injectable()
 export class SearchRequestsRepository {
   constructor(
-    @InjectModel(SearchRequests.name)
+    @InjectModel(SearchRequest.name)
     private searchRequestsModel: Model<SearchRequestsDocument>,
   ) {}
 
@@ -27,21 +27,32 @@ export class SearchRequestsRepository {
     );
   }
 
-  async findAll(offset = 0, limit = 5000): Promise<SearchRequests[]> {
+  async findAll(offset = 0, limit = 5000): Promise<SearchRequest[]> {
     return (
       await this.searchRequestsModel
-        .find({}, ['chatId', 'userId', 'firstName', 'languageCode', 'url'], {
-          skip: offset,
-          limit,
-          sort: {
-            createdAt: 'asc',
+        .find(
+          {},
+          [
+            'chatId',
+            'userId',
+            'firstName',
+            'languageCode',
+            'url',
+            'lastSeenArticleId',
+          ],
+          {
+            skip: offset,
+            limit,
+            sort: {
+              createdAt: 'asc',
+            },
           },
-        })
+        )
         .exec()
     ).map((el) => el.toObject());
   }
 
-  async findOne(chatId: number): Promise<SearchRequests> {
+  async findOne(chatId: number): Promise<SearchRequest> {
     return (
       await this.searchRequestsModel.findOne({ chatId }).exec()
     ).toObject();
@@ -49,9 +60,9 @@ export class SearchRequestsRepository {
 
   update(
     chatId: number,
-    { url }: UpdateSearchRequestDto,
+    data: UpdateSearchRequestDto,
   ): Promise<IRepositoryResult> {
-    return this.searchRequestsModel.updateOne({ chatId }, { url }).exec();
+    return this.searchRequestsModel.updateOne({ chatId }, data).exec();
   }
 
   remove(chatId: number): Promise<any> {

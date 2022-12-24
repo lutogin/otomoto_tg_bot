@@ -4,6 +4,10 @@ import { IArticle, OtomotoSelectors } from './otomoto-parser.interfaces';
 
 @Injectable()
 export class OtomotoParserService {
+  private buildDescription(description: string): string {
+    return description?.length > 100 ? 'n/a' : description;
+  }
+
   private parseArticle(article: any): IArticle {
     return {
       id: article.id,
@@ -11,8 +15,9 @@ export class OtomotoParserService {
       link: article.querySelector(OtomotoSelectors.Link)?.attributes?.href
         ?.textContent,
       title: article.querySelector(OtomotoSelectors.Title)?.textContent,
-      description: article.querySelector(OtomotoSelectors.Description)
-        ?.textContent,
+      description: this.buildDescription(
+        article.querySelector(OtomotoSelectors.Description)?.textContent,
+      ),
       year: article.querySelector(OtomotoSelectors.Year)?.textContent,
       mileage: article.querySelector(OtomotoSelectors.Mileage)?.textContent,
       engine: article.querySelector(OtomotoSelectors.Engine)?.textContent,
@@ -30,7 +35,7 @@ export class OtomotoParserService {
     const doc = new JSDOM(htmlPage).window.document;
 
     const nodeArticles = Array.from(
-      doc.querySelectorAll(OtomotoSelectors.Article),
+      doc.querySelectorAll(OtomotoSelectors.Articles),
     ).slice(0, limit);
 
     return nodeArticles.map(this.parseArticle);

@@ -2,9 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
 @Schema({ collection: 'search-requests', timestamps: true, _id: false })
-export class SearchRequests {
+export class SearchRequest {
   @Prop({ type: Number, required: true, unique: true })
-  chatId: string;
+  chatId: number;
 
   @Prop({ type: Number, required: true })
   userId: string;
@@ -12,17 +12,19 @@ export class SearchRequests {
   @Prop({ type: String, required: true })
   firstName: string;
 
+  @Prop({ type: String, required: false, default: null })
+  userName: string;
+
   @Prop({ type: String, required: true })
   languageCode: string;
 
   @Prop({ type: String, required: true })
   url: string;
 
-  @Prop({ type: String, required: true })
-  lastSeenArticleId: number;
+  @Prop({ type: String, required: false })
+  lastSeenArticleId: string;
 }
 
-export type SearchRequestsDocument = HydratedDocument<SearchRequests>;
+export type SearchRequestsDocument = HydratedDocument<SearchRequest>;
 
-export const SearchRequestsSchema =
-  SchemaFactory.createForClass(SearchRequests);
+export const SearchRequestsSchema = SchemaFactory.createForClass(SearchRequest);

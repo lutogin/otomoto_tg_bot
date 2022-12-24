@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSearchRequestDto } from './dto/create-search-request.dto';
 import { UpdateSearchRequestDto } from './dto/update-search-request.dto';
-import { SearchRequests } from './entities/schemas/search-requests';
-import { IRepositoryResult } from './repositories/search-requests.interface';
+import { SearchRequest } from './entities/schemas/search-request';
+import { IRepositoryResult } from './search-requests.interface';
 import { SearchRequestsRepository } from './repositories/search-requests.repository';
 
 @Injectable()
@@ -17,11 +17,11 @@ export class SearchRequestsService {
     return this.searchRequestsRepository.create(createSearchRequestDto);
   }
 
-  findAll(offset = 0): Promise<SearchRequests[]> {
+  findAll(offset = 0): Promise<SearchRequest[]> {
     return this.searchRequestsRepository.findAll(offset);
   }
 
-  findOne(chatId: number): Promise<SearchRequests> {
+  findOne(chatId: number): Promise<SearchRequest> {
     return this.searchRequestsRepository.findOne(chatId);
   }
 

@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
-  SearchRequests,
+  SearchRequest,
   SearchRequestsSchema,
-} from './entities/schemas/search-requests';
+} from './entities/schemas/search-request';
 import { SearchRequestsRepository } from './repositories/search-requests.repository';
 import { SearchRequestsService } from './search-requests.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: SearchRequests.name, schema: SearchRequestsSchema },
+      { name: SearchRequest.name, schema: SearchRequestsSchema },
     ]),
   ],
   providers: [SearchRequestsService, SearchRequestsRepository],

@@ -1,5 +1,5 @@
 export enum OtomotoSelectors {
-  Article = 'main article',
+  Articles = 'main article[data-variant="regular"]',
   Link = 'div h2 a',
   Title = 'div h2 a',
   Description = 'div div p',
@@ -17,13 +17,13 @@ export interface IArticle {
   id: string;
   link: string;
   title: string;
-  description: string;
-  year: string;
-  mileage: string;
   engine: string;
-  fuelType: string;
-  location: string;
-  date: string;
   img: string;
   price: string;
+  year: string;
+  mileage: string;
+  fuelType: string;
+  location?: string;
+  description?: string;
+  date?: string;
 }

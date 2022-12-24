@@ -1,6 +1,6 @@
-import { PickType } from '@nestjs/mapped-types';
+import { PartialType, PickType } from '@nestjs/mapped-types';
 import { CreateSearchRequestDto } from './create-search-request.dto';
 
-export class UpdateSearchRequestDto extends PickType(CreateSearchRequestDto, [
-  'url',
-]) {}
+export class UpdateSearchRequestDto extends PartialType(
+  PickType(CreateSearchRequestDto, ['url', 'lastSeenArticleId']),
+) {}
