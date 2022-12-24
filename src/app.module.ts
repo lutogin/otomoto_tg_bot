@@ -17,10 +17,14 @@ import appConfig from './config/app.config';
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'),
-        autoIndex: false,
-      }),
+      useFactory: (configService: ConfigService) => {
+        console.log(configService.get<string>('MONGO_URI'));
+
+        return {
+          uri: configService.get<string>('MONGO_URI'),
+          autoIndex: false,
+        };
+      },
       inject: [ConfigService],
     }),
     ScheduleModule.forRoot(),
