@@ -27,13 +27,11 @@ export class MessagesService {
     let result = `<a href="${article.link}">${article.title}</a>
 <b>📝 Description:</b> ${article.description}\n
 <b>🗓️ Year:</b> ${article.year}
+<b>💵 Price: </b> ${article.price}
+<b>🛣️ Mileage:</b> ${article.mileage}
+<b>📍 Location:</b> ${article.location}
 <b>📊 Engine:</b> ${article.engine}
-<b>⛽ FuelType:</b> ${article.fuelType}
-<b>🛣️ Mileage:</b> ${article.mileage}`;
-
-    if (article.location) {
-      result += `\n<b>📍 Location:</b> ${article.location}`;
-    }
+<b>⛽ FuelType:</b> ${article.fuelType}`;
 
     if (article.date) {
       result += `\n<b>📅 Date:</b> ${article.date}`;
