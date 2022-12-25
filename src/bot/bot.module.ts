@@ -6,6 +6,7 @@ import { OtomotoModule } from '../otomoto/otomoto.module';
 import { SearchRequestsModule } from '../search-requests/search-requests.module';
 import { BotService } from './bot.service';
 import { BotUpdate } from './bot.update';
+import { BotController } from './bot.controller';
 
 @Module({
   imports: [
@@ -23,5 +24,6 @@ import { BotUpdate } from './bot.update';
   ],
   providers: [BotUpdate, BotService],
   exports: [BotService],
+  controllers: [BotController],
 })
 export class BotModule {}

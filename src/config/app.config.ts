@@ -14,6 +14,7 @@ const {
   MONGO_URI_SCHEME,
   PAGE_SIZE,
   ADMIN_CHAT_ID,
+  API_KEY,
 } = process.env;
 
 const MONGO_URI =
@@ -28,4 +29,5 @@ export default (): Record<string, any> => ({
   MONGO_URI,
   PAGE_SIZE: Number.parseInt(PAGE_SIZE, 10),
   ADMIN_CHAT_ID: Number.parseInt(ADMIN_CHAT_ID, 10),
+  API_KEY,
 });

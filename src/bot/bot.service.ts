@@ -25,7 +25,7 @@ export class BotService {
     await this.bot.telegram.sendMessage(chatId, message);
   }
 
-  async sendMessageToAdmin(msg: string) {
+  async sendMessageToAdmin(msg: string): Promise<void> {
     await this.sendMessage(this.adminChatId, msg);
   }
 
