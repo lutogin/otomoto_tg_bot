@@ -26,8 +26,8 @@ export class MessagesService {
   fmtCaption(article: IArticle): string {
     let result = `<a href="${article.link}">${article.title}</a>
 <b>📝 Description:</b> ${article.description}\n
-<b>🗓️ Year:</b> ${article.year}
 <b>💵 Price: </b> ${article.price}
+<b>🗓️ Year:</b> ${article.year}
 <b>🛣️ Mileage:</b> ${article.mileage}
 <b>📍 Location:</b> ${article.location}
 <b>📊 Engine:</b> ${article.engine}

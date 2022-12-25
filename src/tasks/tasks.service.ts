@@ -10,6 +10,7 @@ const cronTime = process.env.CRON_TIME || '*/10 * * * *';
 @Injectable()
 export class TasksService {
   private readonly logger: Logger;
+  private defaultPageSize: number;
 
   constructor(
     private readonly searchRequests: SearchRequestsService,
@@ -18,6 +19,7 @@ export class TasksService {
     private readonly configService: ConfigService,
   ) {
     this.logger = new Logger(TasksService.name);
+    this.defaultPageSize = 36;
   }
 
   @Cron(cronTime)
@@ -38,7 +40,7 @@ export class TasksService {
           const articles = await this.otomotoService.getArticles(
             searchRequest.url,
             Number.parseInt(this.configService.get('OTOMOTO_PAGE_SIZE'), 10) ||
-              36,
+              this.defaultPageSize,
           );
 
           if (!articles) {
@@ -66,10 +68,7 @@ export class TasksService {
           );
 
           await this.searchRequests.update(searchRequest.chatId, {
-            lastSeenArticleIds: [
-              ...searchRequest.lastSeenArticleIds,
-              ...newArticles.map((article) => article.id),
-            ],
+            lastSeenArticleIds: articles.map((article) => article.id),
           });
         }),
       );

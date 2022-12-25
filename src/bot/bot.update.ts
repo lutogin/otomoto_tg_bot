@@ -7,6 +7,7 @@ import { get } from 'lodash';
 import { MessagesMap } from '../messages/messages.map';
 import { MessagesService } from '../messages/messages.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
+import { IRepositoryResult } from '../search-requests/search-requests.interface';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
 import { BotService } from './bot.service';
 
@@ -22,7 +23,6 @@ export class BotUpdate {
     private readonly searchRequestsService: SearchRequestsService,
     private readonly otomoto: OtomotoService,
     private readonly bot: BotService,
-    private readonly configService: ConfigService,
   ) {
     this.logger = new Logger(BotUpdate.name);
   }
@@ -56,7 +56,7 @@ export class BotUpdate {
     await ctx.reply('🤖');
   }
 
-  @Hears(/^https:\/\/www\.otomoto\.pl\/.*$/u)
+  @Hears(/^https:\/\/(w{3}\.)?otomoto\.pl\/.*$/u)
   async hears(@Ctx() ctx: Context): Promise<void> {
     try {
       const { chat, from: user } = ctx.message;
@@ -70,14 +70,12 @@ export class BotUpdate {
       const articles = await this.otomoto.getArticles(otomotoUrl);
 
       if (!articles) {
-        await ctx.reply('There are not any article by your url.');
+        await ctx.reply(
+          this.msgService.makeMessage(MessagesMap.WrongLink, lang),
+        );
 
         return;
       }
-
-      await ctx.reply(
-        this.msgService.makeMessage(MessagesMap.LastArticles, lang),
-      );
 
       const result = await this.searchRequestsService.create({
         chatId: chat.id,
@@ -89,9 +87,13 @@ export class BotUpdate {
         lastSeenArticleIds: articles.map((article) => article.id),
       });
 
+      await ctx.reply(
+        this.msgService.makeMessage(MessagesMap.LastArticles, lang),
+      );
+
       await Promise.allSettled(
         articles
-          .slice(1, this.LAST_RECORD_COUNT)
+          .slice(0, this.LAST_RECORD_COUNT)
           .reverse()
           .map((article) =>
             ctx.replyWithPhoto(
@@ -104,25 +106,11 @@ export class BotUpdate {
           ),
       );
 
-      if (result.upsertedCount) {
-        await ctx.reply(
-          this.msgService.makeMessage(
-            MessagesMap.StartLooking,
-            ctx.message.from.language_code,
-          ),
-        );
-      } else {
-        await ctx.reply(
-          this.msgService.makeMessage(
-            MessagesMap.StartLookingUpdatedUrl,
-            ctx.message.from.language_code,
-          ),
-        );
-      }
+      await this.sendUpdateOrCreateUrlMessage(result, ctx);
     } catch (e) {
       this.logger.error(e.message || e, e.stack);
 
-      await this.bot.sendMessageToAdmin(`Bot error: ${e.message}`);
+      await this.bot.sendMessageToAdmin(`Bot error at update: ${e.message}`);
     }
   }
 
@@ -162,5 +150,26 @@ export class BotUpdate {
         ctx.message.from.language_code,
       ),
     );
+  }
+
+  private async sendUpdateOrCreateUrlMessage(
+    result: IRepositoryResult,
+    ctx: Context,
+  ): Promise<void> {
+    if (result.upsertedCount) {
+      await ctx.reply(
+        this.msgService.makeMessage(
+          MessagesMap.StartLooking,
+          ctx.message.from.language_code,
+        ),
+      );
+    } else {
+      await ctx.reply(
+        this.msgService.makeMessage(
+          MessagesMap.StartLookingUpdatedUrl,
+          ctx.message.from.language_code,
+        ),
+      );
+    }
   }
 }

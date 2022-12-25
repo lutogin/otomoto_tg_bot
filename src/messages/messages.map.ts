@@ -59,4 +59,9 @@ export const MessagesMap = {
     pl: '🕒 Proszę czekać. Pobierz dane i ustaw swój url.',
     ua: '🕒 Будь ласка, зачекайте. Отримання даних та налаштування вашого звязку.',
   },
+  WrongLink: {
+    en: '😔 There are not any article by your url. Probably link is wrong.',
+    pl: '😔 Nie ma żadnych artykułów pod podanym adresem. Prawdopodobnie link jest błędny.',
+    ua: '😔 За Вашой url немає жодної статті. Ймовірно, url невірне.',
+  },
 };
