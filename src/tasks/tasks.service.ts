@@ -52,13 +52,13 @@ export class TasksService {
           );
 
           if (!newArticles.length) {
-            this.logger.log(`No new article for ${searchRequest.userName}.`);
+            this.logger.log(`No new article for @${searchRequest.userName}.`);
 
             return null;
           }
 
           this.logger.log(
-            `Found ${newArticles.length} new articles for ${searchRequest.userName}.`,
+            `Found ${newArticles.length} new articles for @${searchRequest.userName}.`,
           );
 
           await Promise.all(

@@ -36,6 +36,7 @@ export class SearchRequestsRepository {
             'chatId',
             'userId',
             'firstName',
+            'userName',
             'languageCode',
             'url',
             'lastSeenArticleIds',
