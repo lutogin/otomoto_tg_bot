@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Ctx, Hears, Help, On, Start, Update } from 'nestjs-telegraf';
 import { Context, Markup } from 'telegraf';
 import { get } from 'lodash';
@@ -30,7 +29,7 @@ export class BotUpdate {
   async start(@Ctx() ctx: Context): Promise<void> {
     const lang = ctx.message.from.language_code;
 
-    this.logger.log(`New user - ${ctx.message.from.id}`);
+    this.logger.log(`New user - ${ctx.message.from.username}`);
 
     await ctx.reply(
       this.msgService.makeMessage(MessagesMap.Start, lang),
@@ -64,7 +63,7 @@ export class BotUpdate {
       const lang = ctx.message.from.language_code;
       const otomotoUrl = get(ctx, 'update.message.text');
 
-      this.logger.log(`Setup link. Chat ID ${user.id}`);
+      this.logger.log(`Setup link. Chat ID ${user.username}`);
 
       await ctx.reply(this.msgService.makeMessage(MessagesMap.Wait, lang));
 
