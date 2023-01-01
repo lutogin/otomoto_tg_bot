@@ -36,6 +36,7 @@ export class BotUpdate {
       this.msgService.makeMessage(MessagesMap.Start, lang),
       Markup.keyboard([
         [this.msgService.makeMessage(MessagesMap.Menu.Setup, lang)],
+        [this.msgService.makeMessage(MessagesMap.Menu.GetLink, lang)],
         [this.msgService.makeMessage(MessagesMap.Menu.Stop, lang)],
       ]).resize(),
     );
@@ -116,6 +117,7 @@ export class BotUpdate {
 
   @Hears(MessagesMap.Menu.Setup.en)
   @Hears(MessagesMap.Menu.Setup.pl)
+  @Hears(MessagesMap.Menu.Setup.ua)
   async setupLink(@Ctx() ctx: Context): Promise<void> {
     await ctx.reply(
       this.msgService.makeMessage(
@@ -127,6 +129,7 @@ export class BotUpdate {
 
   @Hears(MessagesMap.Menu.Stop.en)
   @Hears(MessagesMap.Menu.Stop.pl)
+  @Hears(MessagesMap.Menu.Stop.ua)
   async cancelSubscription(@Ctx() ctx: Context): Promise<void> {
     const { chat } = ctx.message;
 
@@ -138,6 +141,26 @@ export class BotUpdate {
         ctx.message.from.language_code,
       ),
     );
+  }
+
+  @Hears(MessagesMap.Menu.GetLink.en)
+  @Hears(MessagesMap.Menu.GetLink.pl)
+  @Hears(MessagesMap.Menu.GetLink.ua)
+  async getSubscriptionUrl(@Ctx() ctx: Context): Promise<void> {
+    const { chat } = ctx.message;
+
+    const { url } = await this.searchRequestsService.findOne(chat.id);
+
+    if (url) {
+      await ctx.reply(url);
+    } else {
+      await ctx.reply(
+        this.msgService.makeMessage(
+          MessagesMap.LinkNotFound,
+          ctx.message.from.language_code,
+        ),
+      );
+    }
   }
 
   @Hears(/.*/u)

@@ -9,15 +9,25 @@ export const MessagesMap = {
   },
   Menu: {
     Setup: {
-      en: '⚙️ Set search url.',
-      pl: '⚙️ Ustaw adres url wyszukiwania.',
-      ua: '⚙️ Встановити URL для пошуку.',
+      en: '📡 Set search url.',
+      pl: '📡 Ustaw adres url wyszukiwania.',
+      ua: '📡 Встановити URL для пошуку.',
+    },
+    GetLink: {
+      en: '📥 Get your search url.',
+      pl: '📥 Uzyskaj jego adres url do wyszukiwania.',
+      ua: '📥 Отримати свою URL-адресу пошуку.',
     },
     Stop: {
       en: '🛑 Stop receiving messages.',
       pl: '🛑 Przestań odbierać wiadomości.',
       ua: '🛑 Припинити отримувати повідомлення.',
     },
+  },
+  LinkNotFound: {
+    en: '🛑 Not found.',
+    pl: '🛑 Nie znaleziono.',
+    ua: '🛑 Не знайдено.',
   },
   OfferToSetUrl: {
     en: `🔗 Please, send me the search link from otomoto.pl \nExample: ${OTOMOTO_LINK_EXAMPLE}`,
