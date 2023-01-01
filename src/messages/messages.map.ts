@@ -30,9 +30,9 @@ export const MessagesMap = {
     ua: '🛑 Не знайдено.',
   },
   OfferToSetUrl: {
-    en: `🔗 Please, send me the search link from otomoto.pl \nExample: ${OTOMOTO_LINK_EXAMPLE}`,
-    pl: `🔗 Proszę o przesłanie linku do wyszukiwania z otomoto.pl \nPrzykład: ${OTOMOTO_LINK_EXAMPLE}`,
-    ua: `🔗 Будь ласка, надішліть мені посилання на пошук з otomoto.pl \nПриклад: ${OTOMOTO_LINK_EXAMPLE}`,
+    en: `🔗 Please, send me the search URL link from otomoto.pl \nExample: ${OTOMOTO_LINK_EXAMPLE}`,
+    pl: `🔗 Proszę o przesłanie URL linku do wyszukiwania z otomoto.pl \nPrzykład: ${OTOMOTO_LINK_EXAMPLE}`,
+    ua: `🔗 Будь ласка, надішліть мені URL на пошук з otomoto.pl \nПриклад: ${OTOMOTO_LINK_EXAMPLE}`,
   },
   Help: {
     en: '🎬 Use /start command for start the bot.',
