@@ -5,8 +5,8 @@ import { OtomotoClientService } from './otomoto-client.service';
 @Module({
   imports: [
     HttpModule.register({
-      timeout: 5000,
-      maxRedirects: 5,
+      timeout: 10000,
+      maxRedirects: 3,
     }),
   ],
   providers: [OtomotoClientService],
