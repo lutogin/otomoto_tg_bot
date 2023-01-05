@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv-safe';
-import path from 'path';
+import * as path from 'path';
 
 dotenv.config({ path: path.resolve('../', '../', '.env.example') });
 
