@@ -1,5 +1,5 @@
 export enum OtomotoSelectors {
-  Articles = 'main article[data-variant="regular"]',
+  Articles = 'main article[data-variant="regular"][data-testid="listing-ad"]',
   Link = 'div h2 a',
   Title = 'div h2 a',
   Description = 'div div p',
