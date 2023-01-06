@@ -19,7 +19,7 @@ export class OtomotoService {
 
       return this.parser.parse(html, last);
     } catch (e) {
-      this.logger.error(e.message || e);
+      this.logger.error(e.message || e, { url });
 
       throw e;
     }

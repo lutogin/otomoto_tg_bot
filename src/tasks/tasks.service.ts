@@ -1,14 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { BotService } from '../bot/bot.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
 
-const cronTime = process.env.CRON_TIME || '*/10 * * * *';
+const cronTime = process.env.CRON_TIME || '*/15 * * * *';
 
 @Injectable()
-export class TasksService {
+export class TasksService implements OnModuleInit {
   private readonly logger: Logger;
   private defaultPageSize: number;
 
@@ -44,7 +44,9 @@ export class TasksService {
           );
 
           if (!articles) {
-            throw new Error('Articles did not found found.');
+            throw new Error(
+              `Articles did not found found by url ${searchRequest.url}`,
+            );
           }
 
           const newArticles = articles.filter(
@@ -77,5 +79,9 @@ export class TasksService {
 
       await this.bot.sendMessageToAdmin(`Error during cron: ${e.message}`);
     }
+  }
+
+  onModuleInit(): void {
+    this.handleCron();
   }
 }

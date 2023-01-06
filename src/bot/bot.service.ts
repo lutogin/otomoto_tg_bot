@@ -4,6 +4,7 @@ import { InjectBot } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
 import { MessagesService } from '../messages/messages.service';
 import { IArticle } from '../otomoto/otomoto-parser/otomoto-parser.interfaces';
+import { SearchRequestsService } from '../search-requests/search-requests.service';
 
 Injectable();
 export class BotService {
@@ -14,6 +15,7 @@ export class BotService {
     private bot: Telegraf,
     private readonly msgService: MessagesService,
     private readonly configService: ConfigService,
+    private readonly searchRequestsService: SearchRequestsService,
   ) {
     this.adminChatId = Number.parseInt(
       this.configService.get('ADMIN_CHAT_ID'),
@@ -37,6 +39,18 @@ export class BotService {
         caption: this.msgService.fmtCaption(article),
         parse_mode: 'HTML',
       },
+    );
+  }
+
+  async sendMessageToAll(
+    message: string,
+  ): Promise<PromiseSettledResult<void>[]> {
+    const searchRequests = await this.searchRequestsService.findAll();
+
+    return Promise.allSettled(
+      searchRequests.map((searchRequest) =>
+        this.sendMessage(searchRequest.chatId, message),
+      ),
     );
   }
 }
