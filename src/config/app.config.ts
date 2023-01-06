@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv-safe';
 import * as path from 'path';
 
-dotenv.config({ path: path.resolve('../', '../', '.env.example') });
+dotenv.config({ example: path.resolve('../', '../', '.env.example') });
 
 const {
   TELEGRAM_BOT_TOKEN,
