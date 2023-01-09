@@ -61,7 +61,10 @@ export class BotUpdate {
     try {
       const { chat, from: user } = ctx.message;
       const lang = ctx.message.from.language_code;
-      const otomotoUrl = get(ctx, 'update.message.text');
+      const otomotoUrl = get(ctx, 'update.message.text', '').replace(
+        /&page=\d/mu,
+        '',
+      );
 
       this.logger.log(`Setup link. Chat ID ${user.username}`);
 
