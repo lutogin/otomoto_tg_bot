@@ -50,13 +50,13 @@ export class SearchRequestsRepository {
           },
         )
         .exec()
-    ).map((el) => el.toObject());
+    ).map((el) => el?.toObject());
   }
 
   async findOne(chatId: number): Promise<SearchRequest> {
     return (
       await this.searchRequestsModel.findOne({ chatId }).exec()
-    ).toObject();
+    )?.toObject();
   }
 
   update(
