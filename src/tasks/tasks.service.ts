@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
-import { filter, from, map, mergeMap } from 'rxjs';
+import { from, mergeMap } from 'rxjs';
 import { BotService } from '../bot/bot.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
@@ -35,36 +35,6 @@ export class TasksService implements OnModuleInit {
 
         return;
       }
-
-      from(searchRequests).pipe(
-        mergeMap(async (searchRequest) => {
-          const articles = await this.otomotoService.getArticles(
-            searchRequest.url,
-            Number.parseInt(this.configService.get('OTOMOTO_PAGE_SIZE'), 10) ||
-              this.defaultPageSize,
-          );
-
-          if (!articles?.length) {
-            throw new Error('Articles did not found found.');
-          }
-
-          const newArticles = articles.filter(
-            (article) => !searchRequest.lastSeenArticleIds.includes(article.id),
-          );
-
-          if (!newArticles.length) {
-            this.logger.log(`No new article for @${searchRequest.userName}.`);
-
-            return null;
-          }
-
-          this.logger.log(
-            `Found ${newArticles.length} new articles for @${searchRequest.userName}.`,
-          );
-
-          return newArticles;
-        }),
-      );
 
       await Promise.all(
         searchRequests.map(async (searchRequest) => {

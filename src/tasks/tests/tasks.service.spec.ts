@@ -1,37 +1,130 @@
-import { Test } from '@nestjs/testing';
-import { OtomotoService } from '../../otomoto/otomoto.service';
-import { SearchRequestsService } from '../../search-requests/search-requests.service';
-import { MockSearchRequestsService } from '../../search-requests/tests/mocks/search-requests.mock';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 import { TasksService } from '../tasks.service';
+import { OtomotoService } from '../../otomoto/otomoto.service';
+import { BotService } from '../../bot/bot.service';
+import { SearchRequestsService } from '../../search-requests/search-requests.service';
 
-describe('CatsController', () => {
-  let tasksService: TasksService;
+describe('TasksService', () => {
+  let service: TasksService;
+  let searchRequestsService: {
+    findAll: jest.Mock<any, any>;
+    update: jest.Mock<any, any>;
+  };
+  let otomotoService: { getArticles: jest.Mock<any, any> };
+  let botService: {
+    sendMessageToAdmin: jest.Mock<any, any>;
+    sendArticle: jest.Mock<any, any>;
+  };
+  let configService: { get: jest.Mock<any, any> };
 
   beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
+    searchRequestsService = {
+      findAll: jest.fn(),
+      update: jest.fn(),
+    };
+    otomotoService = { getArticles: jest.fn() };
+    botService = { sendArticle: jest.fn(), sendMessageToAdmin: jest.fn() };
+    configService = { get: jest.fn() };
+
+    const module: TestingModule = await Test.createTestingModule({
       providers: [
         TasksService,
-        {
-          provide: SearchRequestsService,
-          useClass: MockSearchRequestsService,
-        },
-        {
-          provide: OtomotoService,
-          useClass:
-        }
+        { provide: SearchRequestsService, useValue: searchRequestsService },
+        { provide: OtomotoService, useValue: otomotoService },
+        { provide: BotService, useValue: botService },
+        { provide: ConfigService, useValue: configService },
       ],
     }).compile();
 
-    tasksService = moduleRef.get<TasksService>(TasksService);
+    service = module.get<TasksService>(TasksService);
   });
 
-  describe('findAll', () => {
-    it('should return an array of cats', async () => {
-      const result = ['test'];
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
 
-      jest.spyOn(tasksService, 'handleCron').mockImplementation(() => null);
+  describe('handleCron', () => {
+    it('should handle no search requests', async () => {
+      searchRequestsService.findAll.mockResolvedValueOnce(null);
+      const logger = jest.spyOn(service.logger, 'log');
 
-      expect(await tasksService.handleCron()).toBe(result);
+      await service.handleCron();
+
+      expect(logger).toBeCalledWith('There are not any search requests.');
+    });
+
+    it('should handle new articles', async () => {
+      searchRequestsService.findAll.mockResolvedValueOnce([
+        {
+          chatId: '123',
+          userName: 'testuser',
+          url: 'http://test.com',
+          lastSeenArticleIds: ['123'],
+        },
+      ]);
+      configService.get.mockReturnValueOnce('');
+      otomotoService.getArticles.mockResolvedValueOnce([
+        { id: '456' },
+        { id: '789' },
+      ]);
+      const logger = jest.spyOn(service.logger, 'log');
+
+      await service.handleCron();
+
+      expect(logger).toBeCalledWith('Found 2 new articles for @testuser.');
+      expect(botService.sendArticle).toBeCalledWith('123', { id: '456' });
+      expect(botService.sendArticle).toBeCalledWith('123', { id: '789' });
+      expect(searchRequestsService.update).toBeCalledWith('123', {
+        lastSeenArticleIds: ['456', '789'],
+      });
+    });
+
+    it('should handle no new articles', async () => {
+      searchRequestsService.findAll.mockResolvedValueOnce([
+        {
+          chatId: '123',
+          userName: 'testuser',
+          url: 'http://test.com',
+          lastSeenArticleIds: ['456', '789'],
+        },
+      ]);
+      configService.get.mockReturnValueOnce('');
+      otomotoService.getArticles.mockResolvedValueOnce([
+        { id: '456' },
+        { id: '789' },
+      ]);
+      const logger = jest.spyOn(service.logger, 'log');
+
+      await service.handleCron();
+
+      expect(logger).toBeCalledWith('No new article for @testuser.');
+      expect(botService.sendArticle).not.toBeCalled();
+      expect(searchRequestsService.update).not.toBeCalled();
+    });
+
+    it('should handle errors', async () => {
+      searchRequestsService.findAll.mockResolvedValueOnce([
+        {
+          chatId: '123',
+          userName: 'testuser',
+          url: 'http://test.com',
+          lastSeenArticleIds: ['456'],
+        },
+      ]);
+      configService.get.mockReturnValueOnce('');
+
+      const errorMsg = 'Test error';
+
+      otomotoService.getArticles.mockRejectedValueOnce(new Error(errorMsg));
+      const logger = jest.spyOn(service.logger, 'error');
+
+      await service.handleCron();
+
+      expect(logger).toBeCalledWith(errorMsg);
+      expect(botService.sendMessageToAdmin).toBeCalledWith(
+        `Error during cron: ${errorMsg}`,
+      );
     });
   });
 });
