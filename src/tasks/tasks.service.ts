@@ -35,12 +35,15 @@ export class TasksService implements OnModuleInit {
         return;
       }
 
+      const pageSize =
+        Number.parseInt(this.configService.get('OTOMOTO_PAGE_SIZE'), 10) ||
+        this.defaultPageSize;
+
       await Promise.all(
         searchRequests.map(async (searchRequest) => {
           const articles = await this.otomotoService.getArticles(
             searchRequest.url,
-            Number.parseInt(this.configService.get('OTOMOTO_PAGE_SIZE'), 10) ||
-              this.defaultPageSize,
+            pageSize,
           );
 
           if (!articles) {

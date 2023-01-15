@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { TasksService } from '../tasks.service';
 import { OtomotoService } from '../../otomoto/otomoto.service';
 import { BotService } from '../../bot/bot.service';
 import { SearchRequestsService } from '../../search-requests/search-requests.service';
+import { TasksServiceRxjs } from '../tasks.service.rxjs';
 
-describe('TasksService', () => {
-  let service: TasksService;
+describe('TasksServiceRxjs', () => {
+  let service: TasksServiceRxjs;
   let searchRequestsService: {
     findAll: jest.Mock<any, any>;
     update: jest.Mock<any, any>;
@@ -29,7 +29,7 @@ describe('TasksService', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        TasksService,
+        TasksServiceRxjs,
         { provide: SearchRequestsService, useValue: searchRequestsService },
         { provide: OtomotoService, useValue: otomotoService },
         { provide: BotService, useValue: botService },
@@ -37,7 +37,7 @@ describe('TasksService', () => {
       ],
     }).compile();
 
-    service = module.get<TasksService>(TasksService);
+    service = module.get<TasksServiceRxjs>(TasksServiceRxjs);
   });
 
   it('should be defined', () => {
