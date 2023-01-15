@@ -121,7 +121,7 @@ describe('TasksService', () => {
 
       await service.handleCron();
 
-      expect(logger).toBeCalledWith(errorObj.message);
+      expect(logger).toBeCalledWith(errorObj.message, errorObj.stack);
       expect(botService.sendMessageToAdmin).toBeCalledWith(
         `Error during cron: ${errorObj.message}`,
       );
