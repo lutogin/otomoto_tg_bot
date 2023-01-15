@@ -1,7 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
-import { from, mergeMap } from 'rxjs';
 import { BotService } from '../bot/bot.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
@@ -10,7 +9,7 @@ const cronTime = process.env.CRON_TIME || '*/15 * * * *';
 
 @Injectable()
 export class TasksService implements OnModuleInit {
-  private readonly logger: Logger;
+  readonly logger: Logger;
   private defaultPageSize: number;
 
   constructor(
