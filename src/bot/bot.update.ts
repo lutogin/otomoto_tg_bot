@@ -151,7 +151,7 @@ export class BotUpdate {
   async getSubscriptionUrl(@Ctx() ctx: Context): Promise<void> {
     const { chat } = ctx.message;
 
-    const { url } = await this.searchRequestsService.findOne(chat.id);
+    const url = get(await this.searchRequestsService.findOne(chat.id), 'url');
 
     if (url) {
       await ctx.reply(url);
