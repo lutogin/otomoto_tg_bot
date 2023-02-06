@@ -56,7 +56,7 @@ export class BotUpdate {
     await ctx.reply('🤖');
   }
 
-  @Hears(/^https:\/\/(w{3}\.)?otomoto\.pl\/.*$/u)
+  @Hears(/^https:\/\/(w{3}\.)?otomoto\.pl\/osobowe.*$/u)
   async hears(@Ctx() ctx: Context): Promise<void> {
     try {
       const { chat, from: user } = ctx.message;
