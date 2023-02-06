@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JSDOM } from 'jsdom';
+import { createHash } from 'crypto';
 import { IArticle, OtomotoSelectors } from './otomoto-parser.interfaces';
 
 @Injectable()
@@ -9,11 +10,13 @@ export class OtomotoParserService {
   }
 
   private parseArticle(article: any): IArticle {
+    const link = article.querySelector(OtomotoSelectors.Link)?.attributes?.href
+      ?.textContent;
+
     return {
-      id: article.id,
-      // @ts-ignore
-      link: article.querySelector(OtomotoSelectors.Link)?.attributes?.href
-        ?.textContent,
+      // id: article.id, //todo: article.id some times have been changing for any ads
+      id: createHash('md5').update(link).digest('hex'),
+      link,
       title: article.querySelector(OtomotoSelectors.Title)?.textContent,
       description: OtomotoParserService.buildDescription(
         article.querySelector(OtomotoSelectors.Description)?.textContent,
