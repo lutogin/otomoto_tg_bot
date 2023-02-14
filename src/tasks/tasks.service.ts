@@ -66,14 +66,29 @@ export class TasksService implements OnModuleInit {
             `Found ${newArticles.length} new articles for @${searchRequest.userName}.`,
           );
 
-          await Promise.all(
-            newArticles.map((article) =>
-              this.bot.sendArticle(searchRequest.chatId, article),
-            ),
-          );
+          try {
+            await Promise.all(
+              newArticles.map((article) =>
+                this.bot.sendArticle(searchRequest.chatId, article),
+              ),
+            );
+          } catch (e) {
+            if (e.code === 403) {
+              console.warn(
+                `Search request was removed by 403. [${searchRequest.chatId}]`,
+              );
+
+              await this.searchRequests.remove(searchRequest.chatId);
+            }
+
+            throw e;
+          }
 
           await this.searchRequests.update(searchRequest.chatId, {
-            lastSeenArticleIds: articles.map((article) => article.id),
+            lastSeenArticleIds: [
+              ...searchRequest.lastSeenArticleIds,
+              ...articles.map((article) => article.id),
+            ],
           });
         }),
       );
