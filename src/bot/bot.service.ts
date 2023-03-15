@@ -34,7 +34,7 @@ export class BotService {
   async sendArticle(chatId: number, article: IArticle): Promise<void> {
     await this.bot.telegram.sendPhoto(
       chatId,
-      { url: article.img },
+      { url: article.img.toLowerCase() },
       {
         caption: this.msgService.fmtCaption(article),
         parse_mode: 'HTML',
