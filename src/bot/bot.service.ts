@@ -34,7 +34,10 @@ export class BotService {
   async sendArticle(chatId: number, article: IArticle): Promise<void> {
     await this.bot.telegram.sendPhoto(
       chatId,
-      { url: article.img.toLowerCase() },
+      // { url: article.img.toLowerCase() },
+      {
+        url: 'https://www.creativefabrica.com/wp-content/uploads/2020/09/02/Auto-car-logo-design-Graphics-5237528-1-580x387.jpg',
+      },
       {
         caption: this.msgService.fmtCaption(article),
         parse_mode: 'HTML',
