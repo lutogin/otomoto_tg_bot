@@ -5,10 +5,13 @@ import { Telegraf } from 'telegraf';
 import { MessagesService } from '../messages/messages.service';
 import { IArticle } from '../otomoto/otomoto-parser/otomoto-parser.interfaces';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
+import { UtilsService } from '../utils/utils.service';
 
 Injectable();
 export class BotService {
   private adminChatId: number;
+  private readonly fallBackImg =
+    'https://www.creativefabrica.com/wp-content/uploads/2020/09/02/Auto-car-logo-design-Graphics-5237528-1-580x387.jpg';
 
   constructor(
     @InjectBot('otomoto')
@@ -16,6 +19,7 @@ export class BotService {
     private readonly msgService: MessagesService,
     private readonly configService: ConfigService,
     private readonly searchRequestsService: SearchRequestsService,
+    private readonly utilsService: UtilsService,
   ) {
     this.adminChatId = Number.parseInt(
       this.configService.get('ADMIN_CHAT_ID'),
@@ -32,11 +36,12 @@ export class BotService {
   }
 
   async sendArticle(chatId: number, article: IArticle): Promise<void> {
+    const file = await this.utilsService.getImageBuffer(article.img);
+
     await this.bot.telegram.sendPhoto(
       chatId,
-      // { url: article.img.toLowerCase() },
       {
-        url: 'https://www.creativefabrica.com/wp-content/uploads/2020/09/02/Auto-car-logo-design-Graphics-5237528-1-580x387.jpg',
+        source: file,
       },
       {
         caption: this.msgService.fmtCaption(article),

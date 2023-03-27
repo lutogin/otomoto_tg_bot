@@ -7,6 +7,7 @@ import { SearchRequestsModule } from '../search-requests/search-requests.module'
 import { BotService } from './bot.service';
 import { BotUpdate } from './bot.update';
 import { BotController } from './bot.controller';
+import { UtilsModule } from '../utils/utils.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { BotController } from './bot.controller';
     MessagesModule,
     SearchRequestsModule,
     OtomotoModule,
+    UtilsModule,
   ],
   providers: [BotUpdate, BotService],
   exports: [BotService],

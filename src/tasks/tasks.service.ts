@@ -4,6 +4,7 @@ import { Cron } from '@nestjs/schedule';
 import { BotService } from '../bot/bot.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { SearchRequestsService } from '../search-requests/search-requests.service';
+import { SearchRequest } from '../search-requests/entities/schemas/search-request';
 
 const cronTime = process.env.CRON_TIME || '*/15 * * * *';
 
@@ -27,7 +28,18 @@ export class TasksService implements OnModuleInit {
     this.logger.log('Cron started.');
 
     try {
-      const searchRequests = await this.searchRequests.findAll();
+      let searchRequests: SearchRequest[];
+
+      if (this.configService.get<string>('NODE_ENV') !== 'prod') {
+        this.logger.debug('DEV MODE ON.');
+        searchRequests = [
+          await this.searchRequests.findOne(
+            this.configService.get('ADMIN_CHAT_ID'),
+          ),
+        ];
+      } else {
+        searchRequests = await this.searchRequests.findAll();
+      }
 
       if (!searchRequests) {
         this.logger.log('There are not any search requests.');
