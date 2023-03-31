@@ -97,10 +97,7 @@ export class TasksService implements OnModuleInit {
           }
 
           await this.searchRequests.update(searchRequest.chatId, {
-            lastSeenArticleIds: [
-              ...searchRequest.lastSeenArticleIds,
-              ...articles.map((article) => article.id),
-            ],
+            lastSeenArticleIds: articles.map((article) => article.id),
           });
         }),
       );
