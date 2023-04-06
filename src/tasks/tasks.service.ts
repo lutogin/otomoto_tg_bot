@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { BotService } from '../bot/bot.service';
@@ -85,9 +85,13 @@ export class TasksService implements OnModuleInit {
               ),
             );
           } catch (e) {
-            this.logger.error(e);
+            this.logger.error({
+              code: e.code,
+              statusCode: e.statusCode,
+              message: e.message,
+            });
 
-            if ([404, 403].includes(e.statusCode)) {
+            if ([HttpStatus.NOT_FOUND, HttpStatus.FORBIDDEN].includes(e.code)) {
               this.logger.warn(
                 `Search request will be removed by ${e.statusCode}. [${searchRequest.chatId}]`,
               );
