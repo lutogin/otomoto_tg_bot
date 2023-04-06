@@ -85,9 +85,11 @@ export class TasksService implements OnModuleInit {
               ),
             );
           } catch (e) {
+            this.logger.error(e);
+
             if ([404, 403].includes(e.statusCode)) {
-              console.warn(
-                `Search request was removed by ${e.statusCode}. [${searchRequest.chatId}]`,
+              this.logger.warn(
+                `Search request will be removed by ${e.statusCode}. [${searchRequest.chatId}]`,
               );
 
               await this.searchRequests.remove(searchRequest.chatId);
@@ -102,7 +104,7 @@ export class TasksService implements OnModuleInit {
         }),
       );
     } catch (e) {
-      this.logger.error(e.message || e, e.stack);
+      this.logger.error(e, e.stack);
 
       await this.bot.sendMessageToAdmin(`Error during cron: ${e.message}`);
     }

@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectBot } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
@@ -9,7 +9,8 @@ import { UtilsService } from '../utils/utils.service';
 
 Injectable();
 export class BotService {
-  private adminChatId: number;
+  private readonly logger = new Logger(BotService.name);
+  private readonly adminChatId: number;
   private readonly fallBackImg =
     'https://www.creativefabrica.com/wp-content/uploads/2020/09/02/Auto-car-logo-design-Graphics-5237528-1-580x387.jpg';
 
@@ -43,10 +44,10 @@ export class BotService {
 
       photo = { source: file };
     } catch (e) {
-      console.error(`Error with link or file. ${article.img}`);
+      this.logger.error(`Error with link or file. LINK: ${article.img}`);
 
       if (e.statusCode === HttpStatus.NOT_FOUND || !article.img) {
-        console.debug(
+        this.logger.debug(
           `Original photo (${article.img}) was not found. Added fallback img.`,
         );
         photo = { url: this.fallBackImg };
