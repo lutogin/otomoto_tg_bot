@@ -11,7 +11,7 @@ const cronTime = process.env.CRON_TIME || '*/15 * * * *';
 @Injectable()
 export class TasksService implements OnModuleInit {
   readonly logger: Logger;
-  private defaultPageSize: number;
+  private readonly defaultPageSize: number;
 
   constructor(
     private readonly searchRequests: SearchRequestsService,
