@@ -7,17 +7,12 @@ export class UtilsService {
   constructor(private readonly httpService: HttpService) {}
 
   async getImageBuffer(url): Promise<Buffer> {
-    try {
-      const { data } = await firstValueFrom(
-        this.httpService.get(url, {
-          responseType: 'arraybuffer',
-        }),
-      );
+    const { data } = await firstValueFrom(
+      this.httpService.get(url, {
+        responseType: 'arraybuffer',
+      }),
+    );
 
-      return Buffer.from(data);
-    } catch (e) {
-      console.error(`Url: ${url}`);
-      throw e;
-    }
+    return Buffer.from(data);
   }
 }

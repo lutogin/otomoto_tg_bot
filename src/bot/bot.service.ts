@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectBot } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
@@ -36,18 +36,25 @@ export class BotService {
   }
 
   async sendArticle(chatId: number, article: IArticle): Promise<void> {
-    const file = await this.utilsService.getImageBuffer(article.img);
+    let photo: { source?: Buffer; url?: string };
 
-    await this.bot.telegram.sendPhoto(
-      chatId,
-      {
-        source: file,
-      },
-      {
-        caption: this.msgService.fmtCaption(article),
-        parse_mode: 'HTML',
-      },
-    );
+    try {
+      const file = await this.utilsService.getImageBuffer(article.img);
+
+      photo = { source: file };
+    } catch (e) {
+      if (e.statusCode === HttpStatus.NOT_FOUND) {
+        console.debug('Original photo was not found. Added fallback img.');
+        photo = { url: this.fallBackImg };
+      } else {
+        throw e;
+      }
+    }
+
+    await this.bot.telegram.sendPhoto(chatId, photo as unknown as any, {
+      caption: this.msgService.fmtCaption(article),
+      parse_mode: 'HTML',
+    });
   }
 
   async sendMessageToAll(

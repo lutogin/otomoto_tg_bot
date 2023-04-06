@@ -85,9 +85,9 @@ export class TasksService implements OnModuleInit {
               ),
             );
           } catch (e) {
-            if ([404, 403].includes(e.code)) {
+            if ([404, 403].includes(e.statusCode)) {
               console.warn(
-                `Search request was removed by ${e.code}. [${searchRequest.chatId}]`,
+                `Search request was removed by ${e.statusCode}. [${searchRequest.chatId}]`,
               );
 
               await this.searchRequests.remove(searchRequest.chatId);
