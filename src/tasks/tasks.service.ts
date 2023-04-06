@@ -12,6 +12,7 @@ const cronTime = process.env.CRON_TIME || '*/15 * * * *';
 export class TasksService implements OnModuleInit {
   readonly logger: Logger;
   private readonly defaultPageSize: number;
+  private readonly LIMIT_ACCUM_ARTICLES = 144;
 
   constructor(
     private readonly searchRequests: SearchRequestsService,
@@ -102,8 +103,18 @@ export class TasksService implements OnModuleInit {
             throw new Error(`${e.message}. ChatID: ${searchRequest.chatId}`);
           }
 
+          const updateArticles = articles.map((article) => article.id);
+
+          updateArticles.push(
+            // eslint-disable-next-line no-extra-parens
+            ...(searchRequest.lastSeenArticleIds.length >
+            this.LIMIT_ACCUM_ARTICLES
+              ? searchRequest.lastSeenArticleIds.slice(articles.length)
+              : searchRequest.lastSeenArticleIds),
+          );
+
           await this.searchRequests.update(searchRequest.chatId, {
-            lastSeenArticleIds: articles.map((article) => article.id),
+            lastSeenArticleIds: updateArticles,
           });
         }),
       );
