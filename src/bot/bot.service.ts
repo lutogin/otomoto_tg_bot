@@ -43,6 +43,8 @@ export class BotService {
 
       photo = { source: file };
     } catch (e) {
+      console.error(`Error with link or file. ${article.img}`);
+
       if (e.statusCode === HttpStatus.NOT_FOUND) {
         console.debug(
           `Original photo (${article.img}) was not found. Added fallback img.`,
