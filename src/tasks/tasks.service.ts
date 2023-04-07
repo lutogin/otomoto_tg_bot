@@ -109,7 +109,10 @@ export class TasksService implements OnModuleInit {
             // eslint-disable-next-line no-extra-parens
             ...(searchRequest.lastSeenArticleIds.length >
             this.LIMIT_ACCUM_ARTICLES
-              ? searchRequest.lastSeenArticleIds.slice(articles.length)
+              ? searchRequest.lastSeenArticleIds.slice(
+                  0,
+                  searchRequest.lastSeenArticleIds.length - articles.length,
+                )
               : searchRequest.lastSeenArticleIds),
           );
 
