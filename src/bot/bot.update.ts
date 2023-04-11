@@ -3,7 +3,7 @@ import { Ctx, Hears, Help, On, Start, Update } from 'nestjs-telegraf';
 import { Context, Markup } from 'telegraf';
 import { get } from 'lodash';
 
-import { MessagesMap } from '../messages/messages.map';
+import { MessagesMap } from '../messages/translations/messages.map';
 import { MessagesService } from '../messages/messages.service';
 import { OtomotoService } from '../otomoto/otomoto.service';
 import { IRepositoryResult } from '../search-requests/search-requests.interface';

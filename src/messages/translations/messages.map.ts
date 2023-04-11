@@ -14,20 +14,21 @@ export const MessagesMap = {
       ua: '📡 Встановити URL для пошуку.',
     },
     GetLink: {
-      en: '📥 Get your search url.',
-      pl: '📥 Uzyskaj jego adres url do wyszukiwania.',
-      ua: '📥 Отримати свою URL-адресу пошуку.',
+      en: '📥 Get your set search url.',
+      pl: '📥 Uzyskaj swój ustawiony adres url do wyszukiwania.',
+      ua: '📥 Отримати свою встановлену URL-адресу пошуку.',
     },
     Stop: {
-      en: '🛑 Stop receiving messages.',
-      pl: '🛑 Przestań odbierać wiadomości.',
-      ua: '🛑 Припинити отримувати повідомлення.',
+      en: '⏹️ Stop receiving messages.',
+      pl: '⏹️ Przestań odbierać wiadomości.',
+      ua: '⏹️ Припинити отримувати повідомлення.',
     },
   },
   LinkNotFound: {
-    en: '🛑 Not found.',
-    pl: '🛑 Nie znaleziono.',
-    ua: '🛑 Не знайдено.',
+    // eslint-disable-next-line quotes
+    en: "🛑 You haven't set search link yet.",
+    pl: '🛑 Nie ustawiłeś jeszcze linku.',
+    ua: '🛑 Ви ще не встановили лінку.',
   },
   OfferToSetUrl: {
     en: `🔗 Please, send me the search URL link from otomoto.pl \nExample: ${OTOMOTO_LINK_EXAMPLE}`,
