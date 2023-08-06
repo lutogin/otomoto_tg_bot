@@ -14,7 +14,7 @@ export const MessagesMap = {
       ua: '📡 Встановити URL для пошуку.',
     },
     GetLink: {
-      en: '📥 Get your set search url.',
+      en: '📥 Get your search url.',
       pl: '📥 Uzyskaj swój ustawiony adres url do wyszukiwania.',
       ua: '📥 Отримати свою встановлену URL-адресу пошуку.',
     },
