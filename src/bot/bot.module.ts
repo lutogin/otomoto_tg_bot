@@ -4,6 +4,7 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { MessagesModule } from '../messages/messages.module';
 import { OtomotoModule } from '../otomoto/otomoto.module';
 import { SearchRequestsModule } from '../search-requests/search-requests.module';
+import { BotCommands } from './bot.commands';
 import { BotService } from './bot.service';
 import { BotUpdate } from './bot.update';
 import { BotController } from './bot.controller';
@@ -24,7 +25,7 @@ import { UtilsModule } from '../utils/utils.module';
     OtomotoModule,
     UtilsModule,
   ],
-  providers: [BotUpdate, BotService],
+  providers: [BotUpdate, BotService, BotCommands],
   exports: [BotService],
   controllers: [BotController],
 })
