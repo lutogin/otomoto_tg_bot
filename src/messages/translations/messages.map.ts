@@ -19,9 +19,9 @@ export const MessagesMap = {
       ua: '📥 Отримати свою встановлену URL-адресу пошуку.',
     },
     Stop: {
-      en: '⏹️ Stop receiving messages.',
-      pl: '⏹️ Przestań odbierać wiadomości.',
-      ua: '⏹️ Припинити отримувати повідомлення.',
+      en: '🛑 Stop receiving messages.',
+      pl: '🛑 Przestań odbierać wiadomości.',
+      ua: '🛑 Припинити отримувати повідомлення.',
     },
   },
   LinkNotFound: {
