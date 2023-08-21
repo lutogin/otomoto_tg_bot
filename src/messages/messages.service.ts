@@ -24,19 +24,14 @@ export class MessagesService {
   }
 
   fmtCaption(article: IArticle): string {
-    let result = `<a href="${article.link}">${article.title}</a>
-<b>📝 Description:</b> ${article.description}\n
-<b>💵 Price: </b> ${article.price}
+    return `<a href="${article.link}">${article.title}</a>
+<b>📝 Description:</b> ${article.description?.slice(0, 100)}\n
+<b>💰 Price: </b> ${article.price}
 <b>🗓️ Year:</b> ${article.year}
-<b>🛣️ Mileage:</b> ${article.mileage}
-<b>📍 Location:</b> ${article.location}
-<b>📊 Engine:</b> ${article.engine}
+<b>⏱️ Mileage:</b> ${article.mileage}
+<b>🚂 Engine:</b> ${article.engine}
+<b>⚡ Power:</b> ${article.power}
+<b>⚙️ Gearbox:</b> ${article.gearbox}
 <b>⛽ FuelType:</b> ${article.fuelType}`;
-
-    if (article.date) {
-      result += `\n<b>📅 Date:</b> ${article.date}`;
-    }
-
-    return result;
   }
 }

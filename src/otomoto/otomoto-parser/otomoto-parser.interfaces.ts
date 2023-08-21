@@ -1,16 +1,16 @@
 export enum OtomotoSelectors {
-  Articles = 'main article[data-variant="regular"][data-testid="listing-ad"]',
-  Link = 'div h2 a',
-  Title = 'div h2 a',
-  Description = 'div div p',
-  Year = 'div div ul li',
-  Mileage = 'div div ul li~li',
-  Engine = 'div div ul li~li~li',
-  FuelType = 'div div ul li~li~li~li',
-  Location = 'div div~ul li span span',
-  Date = 'div div~ul li~li',
-  Img = 'div~div~div img',
-  Price = 'div~div~div > div span',
+  Articles = 'main article[data-media-size="small"]',
+  Link = 'div h1 a',
+  Title = 'div h1 a',
+  Description = 'div~div p',
+  Year = 'div dl dd[data-parameter="year"]',
+  Mileage = 'div dl dd[data-parameter="mileage"]',
+  EngineAndPower = 'div h1+p',
+  GearBox = 'div dl dd[data-parameter="gearbox"]',
+  FuelType = 'div dl dd[data-parameter="fuel_type"]',
+  Location = 'div dl~dl dd p',
+  Img = 'div img',
+  Price = 'div~div~div h3',
 }
 
 export interface IArticle {
@@ -18,6 +18,8 @@ export interface IArticle {
   link: string;
   title: string;
   engine: string;
+  power: string;
+  gearbox: string;
   img: string;
   price: string;
   year: string;

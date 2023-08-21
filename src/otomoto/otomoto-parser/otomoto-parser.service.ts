@@ -13,6 +13,12 @@ export class OtomotoParserService {
     const link = article.querySelector(OtomotoSelectors.Link)?.attributes?.href
       ?.textContent;
 
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    const [engine = 'n/a', power = 'n/a'] =
+      article
+        .querySelector(OtomotoSelectors.EngineAndPower)
+        ?.textContent?.split(' • ') || [];
+
     return {
       // id: article.id, //todo: article.id some times have been changing for any ads
       id: createHash('md5').update(link).digest('hex'),
@@ -23,10 +29,11 @@ export class OtomotoParserService {
       ),
       year: article.querySelector(OtomotoSelectors.Year)?.textContent,
       mileage: article.querySelector(OtomotoSelectors.Mileage)?.textContent,
-      engine: article.querySelector(OtomotoSelectors.Engine)?.textContent,
+      engine,
+      power,
+      gearbox: article.querySelector(OtomotoSelectors.GearBox)?.textContent,
       fuelType: article.querySelector(OtomotoSelectors.FuelType)?.textContent,
       location: article.querySelector(OtomotoSelectors.Location)?.textContent,
-      date: article.querySelector(OtomotoSelectors.Date)?.textContent,
       // @ts-ignore
       img: article.querySelector(OtomotoSelectors.Img)?.attributes?.src
         ?.textContent,
