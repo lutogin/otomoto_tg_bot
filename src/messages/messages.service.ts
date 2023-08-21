@@ -25,13 +25,14 @@ export class MessagesService {
 
   fmtCaption(article: IArticle): string {
     return `<a href="${article.link}">${article.title}</a>
-<b>📝 Description:</b> ${article.description?.slice(0, 100)}\n
 <b>💰 Price: </b> ${article.price}
 <b>🗓️ Year:</b> ${article.year}
 <b>⏱️ Mileage:</b> ${article.mileage}
 <b>🚂 Engine:</b> ${article.engine}
 <b>⚡ Power:</b> ${article.power}
 <b>⚙️ Gearbox:</b> ${article.gearbox}
-<b>⛽ FuelType:</b> ${article.fuelType}`;
+<b>⛽ FuelType:</b> ${article.fuelType}
+<b>📝 Description:</b> ${article.description?.slice(0, 100)}
+`;
   }
 }

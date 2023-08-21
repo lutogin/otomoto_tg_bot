@@ -14,9 +14,9 @@ export class OtomotoParserService {
       ?.textContent;
 
     // eslint-disable-next-line no-unsafe-optional-chaining
-    const [engine = 'n/a', power = 'n/a'] =
+    const [engine = 'n/a', power = 'n/a', description = 'n/a'] =
       article
-        .querySelector(OtomotoSelectors.EngineAndPower)
+        .querySelector(OtomotoSelectors.Description)
         ?.textContent?.split(' • ') || [];
 
     return {
@@ -24,9 +24,7 @@ export class OtomotoParserService {
       id: createHash('md5').update(link).digest('hex'),
       link,
       title: article.querySelector(OtomotoSelectors.Title)?.textContent,
-      description: OtomotoParserService.buildDescription(
-        article.querySelector(OtomotoSelectors.Description)?.textContent,
-      ),
+      description,
       year: article.querySelector(OtomotoSelectors.Year)?.textContent,
       mileage: article.querySelector(OtomotoSelectors.Mileage)?.textContent,
       engine,
