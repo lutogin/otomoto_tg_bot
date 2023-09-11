@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Ctx, Hears, Help, On, Start, Update } from 'nestjs-telegraf';
 import { Context } from 'telegraf';
 
+import { ConfigService } from '@nestjs/config';
 import { MessagesMap } from '../messages/translations/messages.map';
 import { BotCommands } from './bot.commands';
 
@@ -10,7 +11,10 @@ import { BotCommands } from './bot.commands';
 export class BotUpdate {
   private readonly logger: Logger;
 
-  constructor(private readonly botCommands: BotCommands) {
+  constructor(
+      private readonly botCommands: BotCommands,
+      private readonly configService: ConfigService,
+  ) {
     this.logger = new Logger(BotUpdate.name);
   }
   @Start()
@@ -59,8 +63,33 @@ export class BotUpdate {
     await this.botCommands.getSubscriptionUrl(ctx);
   }
 
+  /**
+   * ADMIN
+   */
+  @Hears(/^!get\s\d+$/u)
+  async getSearchRequest(@Ctx() ctx: Context) {
+    if (this.isAdmin(ctx)) {
+      await this.botCommands.getSearchRecordByChatId(ctx);
+    } else {
+      await this.botCommands.unknownCommand(ctx);
+    }
+  }
+
+  @Hears(/^!drop\s\d+$/u)
+  async dropSearchRequest(@Ctx() ctx: Context) {
+    if (this.isAdmin(ctx)) {
+      await this.botCommands.dropSearchRecordByChatId(ctx);
+    } else {
+      await this.botCommands.unknownCommand(ctx);
+    }
+  }
+
   @Hears(/.*/u)
   async unknownCommand(@Ctx() ctx: Context): Promise<void> {
     await this.botCommands.unknownCommand(ctx);
+  }
+
+  private isAdmin(@Ctx() ctx: Context): boolean {
+    return Number(ctx.message.from.id) === Number(this.configService.get<number>('ADMIN_CHAT_ID'));
   }
 }

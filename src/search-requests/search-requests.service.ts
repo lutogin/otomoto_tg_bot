@@ -32,7 +32,7 @@ export class SearchRequestsService {
     return this.searchRequestsRepository.update(chatId, updateSearchRequestDto);
   }
 
-  remove(chatId: number): Promise<any> {
+  remove(chatId: number): Promise<SearchRequest> {
     return this.searchRequestsRepository.remove(chatId);
   }
 }

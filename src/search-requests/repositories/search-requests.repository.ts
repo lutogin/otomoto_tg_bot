@@ -66,7 +66,7 @@ export class SearchRequestsRepository {
     return this.searchRequestsModel.updateOne({ chatId }, data).exec();
   }
 
-  remove(chatId: number): Promise<any> {
+  remove(chatId: number): Promise<SearchRequest> {
     return this.searchRequestsModel.findOneAndRemove({ chatId }).exec();
   }
 }

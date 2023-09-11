@@ -160,6 +160,22 @@ export class BotCommands {
     );
   }
 
+  async getSearchRecordByChatId(ctx: Context): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
+    const [_, chatId] = get(ctx, 'update.message.text', '').split(/\s/u);
+    const record = await this.searchRequestsService.findOne(Number(chatId));
+
+    await ctx.reply(`url: ${record.url} \nuserName: ${record.userName}`);
+  }
+
+  async dropSearchRecordByChatId(ctx: Context): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
+    const [_, chatId] = get(ctx, 'update.message.text', '').split(/\s/u);
+    const result = await this.searchRequestsService.remove(Number(chatId));
+
+    await ctx.reply(`successful: ${!!result.chatId}`);
+  }
+
   private async sendUpdateOrCreateUrlMessage(
     result: IRepositoryResult,
     ctx: Context,
