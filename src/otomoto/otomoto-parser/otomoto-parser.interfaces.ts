@@ -1,5 +1,5 @@
 export enum OtomotoSelectors {
-  Articles = 'main article[data-media-size="small"]',
+  Articles = 'main div[data-testid="search-results"]>div>article[data-media-size="small"]',
   Link = 'div h1 a',
   Title = 'div h1 a',
   Year = 'div dl dd[data-parameter="year"]',
