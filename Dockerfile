@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:23-alpine
 
 ARG DEFAULT_PORT=3000
 

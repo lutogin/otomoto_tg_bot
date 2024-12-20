@@ -1,10 +1,10 @@
 export enum OtomotoSelectors {
   Articles = 'main div[data-testid="search-results"]>div>article[data-media-size="small"]',
-  Link = 'div h1 a',
-  Title = 'div h1 a',
+  Link = 'div a',
+  Title = 'div a',
   Year = 'div dl dd[data-parameter="year"]',
   Mileage = 'div dl dd[data-parameter="mileage"]',
-  Description = 'div h1+p',
+  Description = 'div h2+p',
   GearBox = 'div dl dd[data-parameter="gearbox"]',
   FuelType = 'div dl dd[data-parameter="fuel_type"]',
   Location = 'div dl~dl dd p',

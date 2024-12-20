@@ -39,8 +39,8 @@ export class OtomotoParserService {
     };
   }
 
-  async parse(htmlPage: string, limit = 1000): Promise<IArticle[]> {
-    const doc = await new JSDOM(htmlPage).window.document;
+  parse(htmlPage: string, limit = 1000): IArticle[] {
+    const doc = new JSDOM(htmlPage).window.document;
 
     const nodeArticles = Array.from(
       doc.querySelectorAll(OtomotoSelectors.Articles),

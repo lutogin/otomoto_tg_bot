@@ -106,7 +106,7 @@ export class BotCommands {
     } catch (e) {
       this.logger.error(e.message || e, e.stack);
 
-      await this.bot.sendMessageToAdmin(`Bot error at update: ${e.message}`);
+      await this.bot.sendMessageToAdmin(`Bot error at update: ${e.message}, ${e.stack}`);
     }
   }
 
