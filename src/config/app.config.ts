@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv-safe';
+import * as dotenv from 'dotenv';
 
-dotenv.config({ example: './.env.example' });
+dotenv.config();
 
 const {
   TELEGRAM_BOT_TOKEN,
